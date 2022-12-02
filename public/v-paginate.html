@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>All Bookings</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+    <!-- <table id="bookingTable">
+ <div id="links"></div> -->
+
+    <div id="app">
+        <table>
+            <tr v-for="booking in bookings">
+                <td>{{ booking._id }}</td>
+                <td>{{ booking.email }}</td>
+            </tr>
+        </table>
+        
+        <button v-for="i in pages" @click="fetchPage(i)">{{ i }}</button>
+    </div>
+
+
+
+    <script type="module">
+        import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+        createApp({
+            data() {
+                return {
+                    // message: 'Hello Vue!'
+                    bookings: [],
+                    lastPage: 0,
+                    perPage: Math.max(parseInt(new URLSearchParams(window.location.search).get("perPage")), 2) || 2
+                }
+            },
+            computed: {
+                pages: function () {
+                    var pages = [];
+
+                    for (var i = 1; i <= this.lastPage; i++) {
+                        pages.push(i)
+                    }
+
+                    return pages;
+                }
+            },
+            methods: {
+                fetchPage: async function (page) {
+
+                    var response = await fetch("/api/bookings?perPage=" + this.perPage + "&page=" + page);
+
+                    if (response.ok) {
+                        var data = await response.json();
+
+                        this.bookings = data.bookings;
+                        this.lastPage = data.pages
+
+                    } else {
+                        alert(response.statusText);
+                    }
+                },
+            },
+            mounted: function () {
+                this.fetchPage(1)
+            },
+
+        }).mount('#app')
+    </script>
+</body>
+
+</html>

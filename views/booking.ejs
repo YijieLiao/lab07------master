@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+
+  <body>
+    <%= booking._id %>
+    <%= booking.email %>
+    <%= booking.team %>
+    <%= booking.superhero %>
+
+    <form method="post" action="/bookings/delete/<%= booking._id %>">
+        <button type="submit">Delete</button>
+    </form>
+
+  </body>
+</html> 
